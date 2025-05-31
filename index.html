@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>Snake Game</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="kinza" />
+    <meta name="keywords" content="canvas, game, snake" />
+    <meta name="description" content="a snake game" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="alert" class="d-none">
+      <div>
+      <span id="alert-content">Hello</span>
+        <button onclick="closeAlert()">OK</button>
+      </div>
+    </div>
+    <div id="heading">
+      <h1>Snake Game</h1>
+      <div id="error-content"></div>
+    </div>
+    <canvas id="canvas" width="400" height="400"></canvas>
+    <div id="controls">
+      <div class="stats">
+        <div id="score">Score: <span>0</span></div>
+        <div id="level">Level: <span>1</span></div>
+        <div id="speed">Speed: <span>0</span></div>
+      </div>
+      <div class="btns">
+        <button onclick="controlBtn('ArrowUp')">&uarr;</button>
+        <div>
+          <button onclick="controlBtn('ArrowLeft')">&larr;</button>
+          <button onclick="controlBtn('ArrowDown')">&darr;</button>
+          <button onclick="controlBtn('ArrowRight')">&rarr;</button>
+        </div>
+      </div>
+      <div class="setBtns">
+        <button onclick="pauseFn()" id="pause">Pause</button>
+        <button onclick="resetFn()">Reset</button>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>

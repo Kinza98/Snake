@@ -1,0 +1,177 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root{
+  --main-base: #f0f0f0;
+  --game-base: #f5fff5;
+  --font: #333333; 
+  --green: #32CD32;
+  --orange: #FF5722 ;
+}
+
+body{
+  background-color: var(--main-base);
+  text-align: center;
+  font-family: sans-serif;
+  color: var(--font);
+}
+
+button{
+  cursor: pointer;
+}
+
+.d-none{
+  display: none !important;
+}
+
+#canvas{
+  width: 100%;
+  border: 2px solid var(--green);
+  box-shadow: 0 0 2px rgba(50, 205, 50, 0.2);
+  background-color: var(--game-base);
+  margin: auto;
+}
+
+#controls{
+  display: flex;
+  margin: auto;
+  padding: 1em 2em;
+  flex-direction: row;
+  align-items: space-between;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#controls .btns button{
+  padding: 2px 5px;
+  background-color: var(--orange);
+  color: white;
+  font-size: 16px;
+  border: 1px solid white;
+  border-radius: 0;
+  width: 4em;
+  height: 2em;
+  outline: none;
+  box-shadow: none;
+  font-family: sans-serif;
+  margin: 0;
+  text-align: center;
+}
+
+#controls .btns button:hover,
+#controls .btns button:disabled{
+  background-color: #d53502;
+}
+
+#controls .btns{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+
+/* #alert{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #000000b8;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#alert div{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border-radius: 10px;
+  width: 200px;
+  color: black;
+  padding: 20px;
+} */
+
+/* #alert button{
+  margin-left: auto;
+  background: black;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  outline: none;
+  box-shadow: none;
+  margin-top: 10px;
+} */
+
+#error-content{
+  color: red;
+  font-weight: 100;
+  font-size: 15px;
+  height: 20px;
+}
+
+.setBtns{
+  display: flex;
+  flex-direction: column;
+}
+
+.setBtns button{
+  background-color: #ffffff;
+  border: 2px solid var(--green);
+  color: #333333;
+  font-size: 1rem;
+  padding: 10px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100px;
+}
+
+.setBtns button:hover{
+  background-color: var(--green);
+  color: #ffffff;
+}
+
+.setBtns button:nth-child(1){
+  margin-bottom: 5px;
+}
+
+.stats{
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  font-size: 1.1rem;
+  color: var(--font);
+}
+
+#score span{
+  color: var(--green);
+}
+
+#level span,
+#speed span{
+  color: var(--orange);
+}
+
+
+#canvas.pause{
+  background-color: #e9ebe9;
+}
+
+@media screen and (max-width: 500px) {
+  .stats, .setBtns button{
+    font-size: 0.8rem;
+  }
+
+  .setBtns button{
+    width: 70px;
+  }
+}
