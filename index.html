@@ -10,8 +10,14 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <div id="pre-loader">
+      <div id="flex">
+        <div id="loader"></div>
+      </div>
+    </div>
     <div id="home-page" >
       <div>
+        <h1>Welcome to Snake World</h1>
         <button id="level-1" onclick="startGame(1)">Level 1</button>
         <button id="level-2" onclick="startGame(2)" disabled>Level 2</button>
         <button id="resume" class="d-none" onclick="startGame('resume')">Resume</button>

@@ -1,4 +1,5 @@
 window.addEventListener("load", function(){
+  this.document.getElementById("pre-loader").classList.add("d-none");
   // canvas element
   const canvas = document.getElementById("canvas");
   const ctx = canvas.getContext("2d");
@@ -18,7 +19,6 @@ window.addEventListener("load", function(){
   let level = 1;
   let message = "";
   let isGameReset = false;
-  let isResumeBtn = false;
   
   // snake
   const snake = [
@@ -26,6 +26,8 @@ window.addEventListener("load", function(){
     {x:20, y:0},
     {x: 0, y:0}, //tail
   ];
+  // walls for level 2
+  const walls = [];
   const boxSize = 20;  // size of each block of snake
   let direction = "right"  // direction of snake head
   let canvasImg; //canvas current state
@@ -76,6 +78,34 @@ window.addEventListener("load", function(){
       }
     })
   }
+
+  function createWalls(){
+    for(let i =0; i<5; i++)
+      walls.push({x:100+i*boxSize, y:100})
+    for(let i =0; i<5; i++)
+      walls.push({x:50, y:200+i*boxSize})
+    for(let i =0; i<5; i++){
+      walls.push({x:300, y:250+i*boxSize})
+    }
+    for(let i =0; i<5; i++){
+      walls.push({x:300+i*boxSize, y:250})
+    }
+    console.log(walls)
+  }
+
+  function drawWalls(){
+    ctx.beginPath();
+    ctx.fillStyle = "#5e0101";
+    ctx.strokeStyle = "brown";
+    walls.forEach(wall => {
+      ctx.rect(wall.x, wall.y, boxSize, boxSize);
+      ctx.fill();
+      ctx.stroke();
+  })
+  }
+
+  // createWalls();
+  // drawWalls()
 
   function enableLevels(){
     if(level === 2){
@@ -172,7 +202,6 @@ window.addEventListener("load", function(){
     if(l !== 'resume')
       gameReset();
     else{
-      isResumeBtn = false
       gameLoop();
     }
   }
@@ -311,9 +340,11 @@ window.addEventListener("load", function(){
       if(pause){
         pauseGame()
         pauseBtn.innerText = "Play";
-        canvas.classList.add("pause")
+        pauseBtn.classList.add("active");
+        canvas.classList.add("pause");
       }else{
         pauseBtn.innerText = "Pause";
+        pauseBtn.classList.remove("active");
         canvas.classList.remove("pause")
         resumeGame();
         gameLoop();
@@ -326,7 +357,6 @@ window.addEventListener("load", function(){
     clearInterval(gameInterval)
     document.getElementById("home-page").classList.remove("d-none");
     document.getElementById("resume").classList.remove("d-none");
-    isResumeBtn = true;
   }
   window.resetFn = resetFn;
 
