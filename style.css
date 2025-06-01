@@ -2,6 +2,9 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
 }
 
 :root{
@@ -10,6 +13,11 @@
   --font: #333333; 
   --green: #32CD32;
   --orange: #FF5722 ;
+}
+
+#error{
+  color: var(--orange);
+  margin-bottom: 1em;
 }
 
 body{
@@ -81,6 +89,7 @@ button{
   left: 0;
   right: 0;
   bottom: 0;
+  z-index: 10;
   background-color: #000000;
   color: white;
   display: flex;
@@ -252,8 +261,6 @@ button{
 #home-page h1{
   margin-bottom: 1em;
   color: transparent;
-  text-stroke: 1px var(--green);
-  text-stroke-width: thick;
   -webkit-text-stroke: 1px var(--green);
   -webkit-text-stroke-width: thick;
   font-weight: 800;
@@ -311,6 +318,11 @@ button{
   #home-page h1{
     font-size: 1.8rem;
   }
+
+}
+
+.btns #mobile-reset{
+  display: none !important;
 }
 
 
@@ -335,4 +347,35 @@ button{
     font-weight: 100;
     font-size: 1.3rem;
   }
+  .setBtns{
+    display: none;
+  }
+
+  .btns{
+    width: 100%;
+    position: relative;
+  }
+
+  .btns #mobile-reset{
+    position: absolute;
+    left: 0;
+    top: 0;    
+    display: block !important;
+  }
+
+  
+  #controls .btns button{
+    width: 5em;
+  }
+
+  #controls .btns #mobile-reset button{ 
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+    padding: 0;
+    background: var(--font);
+  }
+
+
 }

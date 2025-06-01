@@ -19,6 +19,8 @@ window.addEventListener("load", function(){
   let level = 1;
   let message = "";
   let isGameReset = false;
+  let isWall = false;
+  let pressSpeed = speed;
   
   // snake
   const snake = [
@@ -51,9 +53,20 @@ window.addEventListener("load", function(){
     ctx.fillRect(food.x, food.y, boxSize, boxSize);
   }
 
+  changeFood()
+
   function changeFood(){
     food.x = Math.floor((Math.random()*canvas.width)/ boxSize)*boxSize;
     food.y = Math.floor((Math.random()*canvas.height)/ boxSize)*boxSize;
+    snake.forEach(s => {
+      if(s.x === food.x && s.y === food.y)
+        changeFood();
+    })
+    if(walls.length > 0)
+      walls.forEach(w => {
+        if(w.x === food.x && w.y === food.y)
+          changeFood();
+      })
   }
 
   // function that draws snake
@@ -79,18 +92,44 @@ window.addEventListener("load", function(){
     })
   }
 
+  function getWall(wallType, s){
+    let x, y;
+    if(wallType == 0){
+      x = Math.floor((Math.random()*(canvas.width - s-3)/boxSize)+3)*boxSize;
+      y = (Math.floor(Math.random()*((canvas.height/boxSize)-3))+3)*boxSize
+    }else if(wallType == 1){
+      x = (Math.floor(Math.random()*((canvas.width/boxSize)-3))+3)*boxSize;
+      y = Math.floor(Math.random()*(canvas.height - s)/boxSize)*boxSize
+    }else if(wallType == 2){
+      x = Math.floor((Math.random()*(canvas.width - s-3)/boxSize)+3)*boxSize;
+      y = Math.floor((Math.random()*(canvas.height - s-3)/boxSize)+3)*boxSize
+    }
+    walls.forEach(wall => {
+      if(wall.x === x && wall.y === y) getWall(wallType, s)
+    })
+    return {x, y}
+  }
+
   function createWalls(){
-    for(let i =0; i<5; i++)
-      walls.push({x:100+i*boxSize, y:100})
-    for(let i =0; i<5; i++)
-      walls.push({x:50, y:200+i*boxSize})
-    for(let i =0; i<5; i++){
-      walls.push({x:300, y:250+i*boxSize})
+    let nWall = Math.floor(Math.random()*3)+3 // 3-6
+    for(let j = 0; j<nWall; j++){
+      let wallLength = Math.floor(Math.random()*3)+5  // 5-7
+      let wallType = Math.floor(Math.random()*3)
+      let s = wallLength * boxSize;
+      let newWall = getWall(wallType, s); 
+      let x = newWall.x;
+      let y = newWall.y;
+      for(let i =0; i<wallLength; i++){
+        if(wallType == 0)
+          walls.push({x:x+i*boxSize, y:y})
+        else if(wallType == 1)
+          walls.push({x:x, y:y+i*boxSize})
+        else if(wallType == 2){
+          walls.push({x:x+i*boxSize, y:y})
+          walls.push({x:x, y:y+i*boxSize})
+        }
+      }
     }
-    for(let i =0; i<5; i++){
-      walls.push({x:300+i*boxSize, y:250})
-    }
-    console.log(walls)
   }
 
   function drawWalls(){
@@ -103,9 +142,6 @@ window.addEventListener("load", function(){
       ctx.stroke();
   })
   }
-
-  // createWalls();
-  // drawWalls()
 
   function enableLevels(){
     if(level === 2){
@@ -145,9 +181,9 @@ window.addEventListener("load", function(){
     direction = "right";
     score = 0;
     updateSpeedandLevels();
-    changeFood();
     isGameReset = true;
     pauseFn();
+    changeFood();
   }
   this.window.gameReset = gameReset;
 
@@ -189,19 +225,51 @@ window.addEventListener("load", function(){
     if(message !== "")
       snakeError();
     displaySpeedAndLevel();
+    if(level == 2 && !isWall){
+      createWalls();
+      isWall = true;
+    }
+    if(level == 2)
+      drawWalls();
   }
 
   // Start game and keeps it continue
-  function gameLoop(){
-    gameFlow();
-    gameInterval = setInterval(gameFlow, speed)
+  let lastTime = 0;
+  function gameLoop(currentTime){
+    // gameFlow();
+    // if(gameInterval) clearInterval(gameInterval);
+    // gameInterval = setInterval(gameFlow, speed);
+    if(!lastTime) 
+      lastTime = currentTime
+    const dTime = currentTime - lastTime;
+
+    if(dTime>=speed){
+      gameFlow();
+      lastTime = currentTime
+    }
+
+    // gameInterval = requestAnimationFrame(gameLoop)
   }
 
   function startGame(l){
     document.getElementById("home-page").classList.add("d-none");
+    if(l === "level-2"){
+      level = 2;
+      score = 0;
+      speed = 300;
+      direction = "right"
+    }
+    if(l === "level-1"){
+      level = 1;
+      score = 0;
+      speed = 500;
+      direction = "right"
+    }
     if(l !== 'resume')
       gameReset();
     else{
+      pause = false;
+      resumeGame()
       gameLoop();
     }
   }
@@ -213,34 +281,41 @@ window.addEventListener("load", function(){
     if(pause)
       return
     let key = event.key;
-    clearInterval(gameInterval)
+    cancelAnimationFrame(gameInterval)
     // snake Moves
     if(key == "ArrowUp"){
       if(direction === "down")
         message = "Invalid move! Snake cannot move backwards."
-      else
+      else{
         direction = "up"
+        speed = 100;
+      }
     }else if(key == "ArrowDown"){
       if(direction === "up")
         message = "Invalid move! Snake cannot move backwards."
-      else
-      direction = "down"
+      else{
+        direction = "down"
+        speed = 100;
+      }
     }else if(key == "ArrowLeft"){
       if(direction === "right")
         message = "Invalid move! Snake cannot move backwards."
-      else
-      direction = "left"
+      else{
+        direction = "left"
+        speed = 100;
+      }
     }else if(key == "ArrowRight"){
       if(direction === "left")
         message = "Invalid move! Snake cannot move backwards."
-      else
-      direction = "right"
+      else{
+        direction = "right"
+        speed = 100;
+      }
     }else if(key !== "F5"){
       message = "Invalid Key/Movement";
     }
     gameLoop();
   }
-
 
   // snake Movement
   function moveSnake(){
@@ -277,20 +352,33 @@ window.addEventListener("load", function(){
     // if collide with walls
     if(newPos.y < 0 || newPos.y >= canvas.height || newPos.x < 0 || newPos.x >= canvas.width){
       message = "You are out! You hit the wall";
-      gameReset();
+      resetFn(); // Pause the game
       newPos = snake[0];
-      score = 0;
       return;
     }
 
     // if position changed then change the snake
-    if( JSON.stringify(snake[0]) !== JSON.stringify(newPos) ){
+    if(!(snake[0].x === newPos.x && snake[0].y === newPos.y)){
       let flag = 1;
       // self collision and food eating
       snake.forEach(s => {
-        if(JSON.stringify(s) === JSON.stringify(newPos)){
+        if(s.x === newPos.x && s.y === newPos.y){
           message = "Oh! You bit yourself";
-          gameReset();
+          // gameReset();
+          resetFn();
+          newPos = snake[0];
+          score = 0;
+          flag = 0
+          return;
+        }
+      })
+      // wall collision 
+      if(walls.length > 0)
+      walls.forEach(w => {
+        if(w.x === newPos.x && w.y === newPos.y){
+          message = "Oh! You hit yourself";
+          // gameReset();
+          resetFn()
           newPos = snake[0];
           score = 0;
           flag = 0
@@ -318,34 +406,41 @@ window.addEventListener("load", function(){
   function pauseGame(){
     saveCanvas();
     clearCanvas();
-    clearInterval(gameInterval);
+    cancelAnimationFrame(gameInterval);
     getSavedCanvas();
+    ctx.font = "30px Arial";
+    ctx.fillStyle = "#000000bf";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "lime"
+    ctx.fillText ("Paused", (canvas.width/ 2)-50, (canvas.height/2)+15)
     document.querySelectorAll(".btns button").forEach(btn => btn.disabled = true)
   }
 
   function resumeGame(){
     document.querySelectorAll(".btns button").forEach(btn => btn.disabled = false)
+    pauseBtn.innerText = "Pause";
+    pauseBtn.classList.remove("active");
+    canvas.classList.remove("pause")
   }
 
 
   function pauseFn(){
     if(isGameReset){
-      console.log("yes reset")
-      clearInterval(gameInterval);
+    console.log("reset")
+      cancelAnimationFrame(gameInterval);
+      resumeGame();
       gameLoop();
       isGameReset = false;
       pause = false;
     }else{
       pause = !pause;
       if(pause){
+        console.log("pause")
         pauseGame()
         pauseBtn.innerText = "Play";
         pauseBtn.classList.add("active");
         canvas.classList.add("pause");
       }else{
-        pauseBtn.innerText = "Pause";
-        pauseBtn.classList.remove("active");
-        canvas.classList.remove("pause")
         resumeGame();
         gameLoop();
       }
@@ -354,18 +449,28 @@ window.addEventListener("load", function(){
   window.pauseFn = pauseFn;
 
   function resetFn(){
-    clearInterval(gameInterval)
+    cancelAnimationFrame(gameInterval)
     document.getElementById("home-page").classList.remove("d-none");
-    document.getElementById("resume").classList.remove("d-none");
+    if(message === "")
+      document.getElementById("resume").classList.remove("d-none");
+    document.getElementById("error").innerText = message
   }
   window.resetFn = resetFn;
 
+  function resetSpeed(){ 
+    speed = pressSpeed
+  }
+
+  this.window.resetSpeed = resetSpeed
+
   this.window.addEventListener("keydown", directionChange)
+  this.window.addEventListener("keyup", resetSpeed)
 
 
   // reset canvas size
   function canvasResize(){
     saveCanvas();  //save content of canvas before resizing
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
     let h =  Math.floor((window.innerHeight - controls.offsetHeight - heading.offsetHeight - 2)/boxSize)*boxSize;
     canvas.height = h;
     canvas.width = Math.floor(window.innerWidth/ boxSize)*boxSize;
@@ -383,5 +488,4 @@ window.addEventListener("load", function(){
   }
   this.window.addEventListener("resize", canvasResize);
   window.closeError = closeError;
-
 })

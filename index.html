@@ -17,10 +17,11 @@
     </div>
     <div id="home-page" >
       <div>
-        <h1>Welcome to Snake World</h1>
+        <h1>Snake World</h1>
         <button id="level-1" onclick="startGame(1)">Level 1</button>
         <button id="level-2" onclick="startGame(2)" disabled>Level 2</button>
         <button id="resume" class="d-none" onclick="startGame('resume')">Resume</button>
+        <p id="error"></p>
       </div>
     </div>
     <canvas id="canvas" width="400" height="400"></canvas>
@@ -34,11 +35,35 @@
         <div id="speed">Speed: <span>0</span></div>
       </div>
       <div class="btns">
-        <button onclick="controlBtn('ArrowUp')">&uarr;</button>
+        <button 
+          onmousedown="controlBtn('ArrowUp')"
+          ontouchstart="controlBtn('ArrowUp')"
+          onmouseup="resetSpeed()"
+          ontouchend="resetSpeed()"
+        >&uarr;</button>
         <div>
-          <button onclick="controlBtn('ArrowLeft')">&larr;</button>
-          <button onclick="controlBtn('ArrowDown')">&darr;</button>
-          <button onclick="controlBtn('ArrowRight')">&rarr;</button>
+          <button 
+          
+            onmousedown="controlBtn('ArrowLeft')"
+            ontouchstart="controlBtn('ArrowLeft')"
+            onmouseup="resetSpeed()"
+            ontouchend="resetSpeed()"
+          >&larr;</button>
+          <button 
+            onmousedown="controlBtn('ArrowDown')"
+            ontouchstart="controlBtn('ArrowDown')"
+            onmouseup="resetSpeed()"
+            ontouchend="resetSpeed()"
+          >&darr;</button>
+          <button 
+          onmousedown="controlBtn('ArrowRight')"
+          ontouchstart="controlBtn('ArrowRight')"
+          onmouseup="resetSpeed()"
+          ontouchend="resetSpeed()"
+          >&rarr;</button>
+        </div>
+        <div id="mobile-reset">
+            <button onclick="resetFn()">||</button>
         </div>
       </div>
       <div class="setBtns">
