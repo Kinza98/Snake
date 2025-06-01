@@ -4,7 +4,7 @@ window.addEventListener("load", function(){
   const ctx = canvas.getContext("2d");
   
   const controls = this.document.getElementById("controls");  // buttons
-  const heading = this.document.getElementById("heading");  // heading
+  const heading = this.document.getElementById("heading");  // heading 
   let errorContent = this.document.getElementById("error-content");  // error message container
   let scoreContainer = this.document.querySelector("#score>span");  //score container
   let speedContainer = this.document.querySelector("#speed>span");  //speed container
@@ -13,9 +13,12 @@ window.addEventListener("load", function(){
   let pause = false;
   let gameInterval;
   let speed = 500;
-  let score = 0;
+  let score = 14;
+  let highScore = 15;
   let level = 1;
   let message = "";
+  let isGameReset = false;
+  let isResumeBtn = false;
   
   // snake
   const snake = [
@@ -74,6 +77,12 @@ window.addEventListener("load", function(){
     })
   }
 
+  function enableLevels(){
+    if(level === 2){
+      document.getElementById("level-2").disabled = false
+    }
+  }
+
   // error box 
   function snakeError(){
     errorContent.innerText = message;
@@ -105,44 +114,51 @@ window.addEventListener("load", function(){
     // gameLoop();
     direction = "right";
     score = 0;
+    updateSpeedandLevels();
     changeFood();
+    isGameReset = true;
+    pauseFn();
   }
   this.window.gameReset = gameReset;
 
+  // function to increase speed and levels
+  function updateSpeedandLevels(){
+    if(level === 1 && score >=5 && score < 10){
+      speed = 200;
+    } else if (level === 1 && score >= 10 && score < highScore){
+      speed = 100
+    } else if (level === 1 && score === highScore){
+      level = 2;
+      gameReset();   
+      enableLevels();  
+    }else if(level === 2){
+      speed = 300
+    }else if(level === 1){
+      speed = 500
+    }
+  }
+
+  // function to increase speed and levels
+  function displaySpeedAndLevel(){
+    if(speed <= 100)
+      speedContainer.innerText = "High"; 
+    else if(speed <= 200)
+      speedContainer.innerText = "Normal"; 
+    else if (speed <= 500)
+      speedContainer.innerText = "Easy"; 
+    levelContainer.innerText = "Level " + level
+    scoreContainer.innerText = score + " / " + highScore; 
+  }
+
   // game Flow
   function gameFlow(){
-    if(score >= 5) {
-      if(level<=3){
-        level++;
-        score = 0;
-      }
-      if(level === 2)
-        speed = 200;
-    }
     clearCanvas();
     moveSnake();
     drawFood();
     drawSnake();
     if(message !== "")
       snakeError();
-    if(speed <= 500)
-      speedContainer.innerText = "Normal"; 
-    else
-      speedContainer.innerText = "High"; 
-    let scoreMsg = "";
-    if(level === 1){
-      scoreMsg = score + " / " + 20;
-      levelContainer.innerText = "Easy";
-    }
-    else if(level === 2){
-      scoreMsg = score + " / " + 20;
-      levelContainer.innerText = "Normal";
-    }
-    else if(level === 3){
-      scoreMsg = score + " / " + 20;
-      levelContainer.innerText = "Hard";
-    }
-      scoreContainer.innerText = scoreMsg; 
+    displaySpeedAndLevel();
   }
 
   // Start game and keeps it continue
@@ -150,8 +166,19 @@ window.addEventListener("load", function(){
     gameFlow();
     gameInterval = setInterval(gameFlow, speed)
   }
-  gameLoop()
 
+  function startGame(l){
+    document.getElementById("home-page").classList.add("d-none");
+    if(l !== 'resume')
+      gameReset();
+    else{
+      isResumeBtn = false
+      gameLoop();
+    }
+  }
+
+  this.window.startGame = startGame;
+  
   // when directions change
   function directionChange(event){
     if(pause)
@@ -215,6 +242,7 @@ window.addEventListener("load", function(){
     if(newPos.x === food.x && newPos.y === food.y){
       change = 1;
       score++;
+      updateSpeedandLevels();
     }
 
     // if collide with walls
@@ -242,12 +270,10 @@ window.addEventListener("load", function(){
       })
       if(flag){
         if(shift){
-          console.log("shift")
           snake.shift();
           snake.unshift(newPos)
         }
         else{
-          console.log("no shift")
           snake.unshift(newPos)
           if(!change){
             snake.pop();
@@ -260,28 +286,47 @@ window.addEventListener("load", function(){
     }
   }
 
+  function pauseGame(){
+    saveCanvas();
+    clearCanvas();
+    clearInterval(gameInterval);
+    getSavedCanvas();
+    document.querySelectorAll(".btns button").forEach(btn => btn.disabled = true)
+  }
+
+  function resumeGame(){
+    document.querySelectorAll(".btns button").forEach(btn => btn.disabled = false)
+  }
+
 
   function pauseFn(){
-    pause = !pause;
-    if(pause){
-      saveCanvas();
-      clearCanvas();
+    if(isGameReset){
+      console.log("yes reset")
       clearInterval(gameInterval);
-      getSavedCanvas();
-      pauseBtn.innerText = "Play";
-      canvas.classList.add("pause")
-      document.querySelectorAll(".btns button").forEach(btn => btn.disabled = true)
-    }else{
       gameLoop();
-      pauseBtn.innerText = "Pause";
-      canvas.classList.remove("pause")
-      document.querySelectorAll(".btns button").forEach(btn => btn.disabled = false)
-    }
+      isGameReset = false;
+      pause = false;
+    }else{
+      pause = !pause;
+      if(pause){
+        pauseGame()
+        pauseBtn.innerText = "Play";
+        canvas.classList.add("pause")
+      }else{
+        pauseBtn.innerText = "Pause";
+        canvas.classList.remove("pause")
+        resumeGame();
+        gameLoop();
+      }
+    } 
   }
   window.pauseFn = pauseFn;
 
   function resetFn(){
-    gameReset();
+    clearInterval(gameInterval)
+    document.getElementById("home-page").classList.remove("d-none");
+    document.getElementById("resume").classList.remove("d-none");
+    isResumeBtn = true;
   }
   window.resetFn = resetFn;
 
@@ -291,7 +336,7 @@ window.addEventListener("load", function(){
   // reset canvas size
   function canvasResize(){
     saveCanvas();  //save content of canvas before resizing
-    let h =  Math.floor((window.innerHeight - controls.offsetHeight - heading.offsetHeight)/boxSize)*boxSize;
+    let h =  Math.floor((window.innerHeight - controls.offsetHeight - heading.offsetHeight - 2)/boxSize)*boxSize;
     canvas.height = h;
     canvas.width = Math.floor(window.innerWidth/ boxSize)*boxSize;
     getSavedCanvas(); //get content of canvas after resizing

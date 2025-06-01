@@ -75,7 +75,7 @@ button{
 }
 
 
-/* #alert{
+ #home-page{
   position: fixed;
   top: 0;
   left: 0;
@@ -88,6 +88,49 @@ button{
   justify-content: center;
 }
 
+#home-page > div{  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+#home-page button{
+  background-color: var(--green);
+  padding: 1em 2em;
+  color: var(--game-base);
+  font-size: 1rem;
+  border-radius: 5px;
+  box-shadow: none;
+  outline: none;
+  border: 1px solid var(--green);
+  border-style: groove;
+  margin-bottom: 10px;
+  width: 200px;
+}
+
+#home-page button:hover{
+  border-color: var(--game-base);
+}
+
+#home-page button:disabled{
+  border-color: var(--green); 
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+#home-page #resume{
+  background-color: var(--orange);
+  border-color: var(--orange);
+  /* background-color: transparent */
+}
+
+#home-page button:hover{
+  border-color: var(--font);
+}
+
+
+/*
 #alert div{
   display: flex;
   flex-direction: column;
@@ -112,7 +155,7 @@ button{
 } */
 
 #error-content{
-  color: red;
+  color: var(--orange);
   font-weight: 100;
   font-size: 15px;
   height: 20px;
@@ -152,13 +195,18 @@ button{
   color: var(--font);
 }
 
-#score span{
+.stats div {
+  padding: 2px 2px;
+}
+
+#score span,
+#speed span{
   color: var(--green);
 }
 
-#level span,
-#speed span{
+#level span{
   color: var(--orange);
+  font-weight: bold;
 }
 
 
@@ -168,10 +216,51 @@ button{
 
 @media screen and (max-width: 500px) {
   .stats, .setBtns button{
-    font-size: 0.8rem;
+    font-size: 0.9rem;
   }
 
   .setBtns button{
+    border-radius: 5px;
+    padding: 7px 5px;
     width: 70px;
   }
+
+  #controls{
+    padding: 1em;
+  }
+
+  #controls .btns button{
+    width: 3em;
+  }
+
+  #error-content{
+    font-size: 14px;
+  }
+
+  #home-page button{
+    width: 150px;
+    font-size: 0.8rem;
+    padding: 7px;
+    border-radius: 5px;
+  }
+}
+
+
+@media screen and (max-width: 400px) {
+
+  #controls{
+    flex-wrap: wrap;
+  }
+
+  .stats{
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  #error-content{
+    font-size: 13px;
+  }
+
 }
