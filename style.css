@@ -377,5 +377,9 @@ button{
     background: var(--font);
   }
 
+  #home-page h1{
+    -webkit-text-stroke: 0px;
+    color: var(--green);
+  }
 
 }
