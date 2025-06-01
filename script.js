@@ -248,7 +248,7 @@ window.addEventListener("load", function(){
       lastTime = currentTime
     }
 
-    // gameInterval = requestAnimationFrame(gameLoop)
+    gameInterval = requestAnimationFrame(gameLoop)
   }
 
   function startGame(l){
