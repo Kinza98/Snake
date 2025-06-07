@@ -11,17 +11,16 @@ window.addEventListener("load", function(){
   let speedContainer = this.document.querySelector("#speed>span");  //speed container
   let levelContainer = this.document.querySelector("#level>span");  //level container
   let pauseBtn = this.document.getElementById("pause");  //pause button
-  let pause = false;
-  let gameInterval;
-  let speed = 500;
-  let score = 14;
-  let highScore = 15;
-  let level = 1;
-  let message = "";
-  let isGameReset = false;
-  let isWall = false;
-  let pressSpeed = speed;
-  
+  let pause = false;  // to check if game is paused
+  let gameInterval;  // stores game loop
+  let speed = 500; //speed for snake
+  let score = 0; // initial score
+  let highScore = 15; // highest score
+  let level = 1;  // game levels
+  let message = "";  // message to display
+  let isGameReset = false;  // flag indicates if game needs to be reset
+  let onResume = false;  // flag indicates game is not on resume/reset 
+  let isWall = false;  // flag indicates if walls need to be displayed
   // snake
   const snake = [
     {x:40, y:0}, // head
@@ -53,8 +52,7 @@ window.addEventListener("load", function(){
     ctx.fillRect(food.x, food.y, boxSize, boxSize);
   }
 
-  changeFood()
-
+  // changes food position
   function changeFood(){
     food.x = Math.floor((Math.random()*canvas.width)/ boxSize)*boxSize;
     food.y = Math.floor((Math.random()*canvas.height)/ boxSize)*boxSize;
@@ -68,6 +66,7 @@ window.addEventListener("load", function(){
           changeFood();
       })
   }
+  changeFood()
 
   // function that draws snake
   function drawSnake(){
@@ -92,6 +91,7 @@ window.addEventListener("load", function(){
     })
   }
 
+  // functions that return wall coordinates
   function getWall(wallType, s){
     let x, y;
     if(wallType == 0){
@@ -110,6 +110,7 @@ window.addEventListener("load", function(){
     return {x, y}
   }
 
+  // store wall coordinates into wall variable
   function createWalls(){
     let nWall = Math.floor(Math.random()*3)+3 // 3-6
     for(let j = 0; j<nWall; j++){
@@ -132,6 +133,7 @@ window.addEventListener("load", function(){
     }
   }
 
+  // draw walls
   function drawWalls(){
     ctx.beginPath();
     ctx.fillStyle = "#5e0101";
@@ -143,6 +145,7 @@ window.addEventListener("load", function(){
   })
   }
 
+  // when level changes to level 2, level 2 button should be enabled
   function enableLevels(){
     if(level === 2){
       document.getElementById("level-2").disabled = false
@@ -170,6 +173,7 @@ window.addEventListener("load", function(){
 
   // reset the whole game
   function gameReset(){
+    console.log('reset')
     while(snake.length !== 0)
         snake.pop();
     if(snake.length === 0){
@@ -197,8 +201,12 @@ window.addEventListener("load", function(){
       level = 2;
       gameReset();   
       enableLevels();  
-    }else if(level === 2){
+    }else if(level === 2 && score < 5){
       speed = 300
+    }else if(level === 2 && score >=5 && score < 10){
+      speed = 200
+    }else if(level === 2 && score >= 10 && score < highScore){
+      speed = 150
     }else if(level === 1){
       speed = 500
     }
@@ -231,14 +239,18 @@ window.addEventListener("load", function(){
     }
     if(level == 2)
       drawWalls();
+
+    if(level === 2 && score === highScore){
+      message = "YOU WONNNNN!";
+      resetFn();
+    }
+    if(message !== "")
+      snakeError();
   }
 
   // Start game and keeps it continue
   let lastTime = 0;
   function gameLoop(currentTime){
-    // gameFlow();
-    // if(gameInterval) clearInterval(gameInterval);
-    // gameInterval = setInterval(gameFlow, speed);
     if(!lastTime) 
       lastTime = currentTime
     const dTime = currentTime - lastTime;
@@ -288,28 +300,28 @@ window.addEventListener("load", function(){
         message = "Invalid move! Snake cannot move backwards."
       else{
         direction = "up"
-        speed = 100;
+        speed = 150;
       }
     }else if(key == "ArrowDown"){
       if(direction === "up")
         message = "Invalid move! Snake cannot move backwards."
       else{
         direction = "down"
-        speed = 100;
+        speed = 150;
       }
     }else if(key == "ArrowLeft"){
       if(direction === "right")
         message = "Invalid move! Snake cannot move backwards."
       else{
         direction = "left"
-        speed = 100;
+        speed = 150;
       }
     }else if(key == "ArrowRight"){
       if(direction === "left")
         message = "Invalid move! Snake cannot move backwards."
       else{
         direction = "right"
-        speed = 100;
+        speed = 150;
       }
     }else if(key !== "F5"){
       message = "Invalid Key/Movement";
@@ -365,6 +377,7 @@ window.addEventListener("load", function(){
         if(s.x === newPos.x && s.y === newPos.y){
           message = "Oh! You bit yourself";
           // gameReset();
+          onResume = false
           resetFn();
           newPos = snake[0];
           score = 0;
@@ -377,7 +390,7 @@ window.addEventListener("load", function(){
       walls.forEach(w => {
         if(w.x === newPos.x && w.y === newPos.y){
           message = "Oh! You hit yourself";
-          // gameReset();
+          onResume = false
           resetFn()
           newPos = snake[0];
           score = 0;
@@ -426,7 +439,6 @@ window.addEventListener("load", function(){
 
   function pauseFn(){
     if(isGameReset){
-    console.log("reset")
       cancelAnimationFrame(gameInterval);
       resumeGame();
       gameLoop();
@@ -451,14 +463,23 @@ window.addEventListener("load", function(){
   function resetFn(){
     cancelAnimationFrame(gameInterval)
     document.getElementById("home-page").classList.remove("d-none");
-    if(message === "")
+    if(onResume){
       document.getElementById("resume").classList.remove("d-none");
+      onResume = false
+    }else{
+      document.getElementById("resume").classList.add("d-none");
+    }
     document.getElementById("error").innerText = message
   }
-  window.resetFn = resetFn;
+
+  function resetBtnFn(){
+    onResume = true;
+    resetFn()
+  }
+  window.resetBtnFn = resetBtnFn;
 
   function resetSpeed(){ 
-    speed = pressSpeed
+    updateSpeedandLevels()
   }
 
   this.window.resetSpeed = resetSpeed

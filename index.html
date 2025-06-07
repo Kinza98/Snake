@@ -26,6 +26,9 @@
     </div>
     <canvas id="canvas" width="400" height="400"></canvas>
     <div id="heading">
+        <div id="mobile-reset">
+            <button onclick="resetBtnFn()">||</button>
+        </div>
       <div id="error-content"></div>
     </div>
     <div id="controls">
@@ -62,13 +65,10 @@
           ontouchend="resetSpeed()"
           >&rarr;</button>
         </div>
-        <div id="mobile-reset">
-            <button onclick="resetFn()">||</button>
-        </div>
       </div>
       <div class="setBtns">
         <button onclick="pauseFn()" id="pause">Pause</button>
-        <button onclick="resetFn()">Reset</button>
+        <button onclick="resetBtnFn()">Reset</button>
       </div>
     </div>
     <script src="script.js"></script>

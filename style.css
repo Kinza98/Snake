@@ -321,7 +321,11 @@ button{
 
 }
 
-.btns #mobile-reset{
+#heading{
+  padding: 0 0.5em;
+}
+
+#mobile-reset{
   display: none !important;
 }
 
@@ -356,10 +360,11 @@ button{
     position: relative;
   }
 
-  .btns #mobile-reset{
-    position: absolute;
+  #mobile-reset{
+    text-align: left;
+    /* position: absolute;
     left: 0;
-    top: 0;    
+    top: 0;     */
     display: block !important;
   }
 
@@ -368,13 +373,14 @@ button{
     width: 5em;
   }
 
-  #controls .btns #mobile-reset button{ 
+  #mobile-reset button{ 
     border-radius: 50%;
     width: 30px;
     height: 30px;
     font-size: 16px;
     padding: 0;
     background: var(--font);
+    color: var(--game-base);
   }
 
   #home-page h1{
