@@ -173,7 +173,6 @@ window.addEventListener("load", function(){
 
   // reset the whole game
   function gameReset(){
-    console.log('reset')
     while(snake.length !== 0)
         snake.pop();
     if(snake.length === 0){
@@ -250,6 +249,7 @@ window.addEventListener("load", function(){
   // Start game and keeps it continue
   let lastTime = performance.now();;
   function gameLoop(currentTime){
+    if (pause) return; 
     if(!lastTime) 
       lastTime = currentTime
     const dTime = currentTime - lastTime;
@@ -263,27 +263,37 @@ window.addEventListener("load", function(){
   }
 
   function startGame(l){
-    document.getElementById("home-page").classList.add("d-none");
-    if(l === "level-2"){
-      level = 2;
-      score = 0;
-      speed = 300;
-      direction = "right"
-    }
-    else if(l === "level-1"){
-      level = 1;
-      score = 0;
-      speed = 500;
-      direction = "right"
-    }
-    if(l !== 'resume')
-      gameReset();
-    else{
-      pause = false;
-      resumeGame();
-      requestAnimationFrame(gameLoop)    ;
-    }
+    
+  // Start the game loop
+  lastTime = performance.now();  // reset timer
+  document.getElementById("home-page").classList.add("d-none");
+  if(l === "level-2"){
+    level = 2;
+    score = 0;
+    speed = 300;
+    direction = "right"
   }
+  else if(l === "level-1"){
+    level = 1;
+    score = 0;
+    speed = 500;
+    direction = "right"
+  }
+  if(l !== 'resume'){
+    gameReset();
+    clearCanvas();
+    drawFood();    // draw food first
+    drawSnake();   // draw the snake before any movement
+    displaySpeedAndLevel();
+  } else {
+    pause = false;
+    lastTime = null; 
+    resumeGame();
+  }
+
+    gameInterval = requestAnimationFrame(gameLoop)
+}
+
 
   this.window.startGame = startGame;
   
@@ -298,28 +308,28 @@ window.addEventListener("load", function(){
         message = "Invalid move! Snake cannot move backwards."
       else{
         direction = "up"
-        speed = 150;
+        // speed = speed+50;
       }
     }else if(key == "ArrowDown"){
       if(direction === "up")
         message = "Invalid move! Snake cannot move backwards."
       else{
         direction = "down"
-        speed = 150;
+        // speed = 150;
       }
     }else if(key == "ArrowLeft"){
       if(direction === "right")
         message = "Invalid move! Snake cannot move backwards."
       else{
         direction = "left"
-        speed = 150;
+        // speed = 150;
       }
     }else if(key == "ArrowRight"){
       if(direction === "left")
         message = "Invalid move! Snake cannot move backwards."
       else{
         direction = "right"
-        speed = 150;
+        // speed = 150;
       }
     }else if(key !== "F5"){
       message = "Invalid Key/Movement";
@@ -425,6 +435,7 @@ window.addEventListener("load", function(){
   }
 
   function resumeGame(){
+    pause = false;
     document.querySelectorAll(".btns button").forEach(btn => btn.disabled = false)
     pauseBtn.innerText = "Pause";
     pauseBtn.classList.remove("active");
@@ -456,7 +467,7 @@ window.addEventListener("load", function(){
   window.pauseFn = pauseFn;
 
   function resetFn(){
-    cancelAnimationFrame(gameInterval)
+    cancelAnimationFrame(gameInterval);
     document.getElementById("home-page").classList.remove("d-none");
     if(onResume){
       document.getElementById("resume").classList.remove("d-none");
