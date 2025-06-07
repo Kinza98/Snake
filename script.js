@@ -227,9 +227,9 @@ window.addEventListener("load", function(){
   // game Flow
   function gameFlow(){
     clearCanvas();
-    moveSnake();
     drawFood();
     drawSnake();
+    moveSnake();
     if(message !== "")
       snakeError();
     displaySpeedAndLevel();
@@ -271,7 +271,7 @@ window.addEventListener("load", function(){
       speed = 300;
       direction = "right"
     }
-    if(l === "level-1"){
+    else if(l === "level-1"){
       level = 1;
       score = 0;
       speed = 500;
@@ -332,7 +332,6 @@ window.addEventListener("load", function(){
   // snake Movement
   function moveSnake(){
     let change = 0;
-    let shift = 0;
     let newPos = {
       x: snake[0].x,
       y: snake[0].y
@@ -364,8 +363,11 @@ window.addEventListener("load", function(){
     // if collide with walls
     if(newPos.y < 0 || newPos.y >= canvas.height || newPos.x < 0 || newPos.x >= canvas.width){
       message = "You are out! You hit the wall";
+      onResume = false
       resetFn(); // Pause the game
       newPos = snake[0];
+      score = 0;
+      flag = 0
       return;
     }
 
@@ -399,19 +401,13 @@ window.addEventListener("load", function(){
         }
       })
       if(flag){
-        if(shift){
-          snake.shift();
-          snake.unshift(newPos)
-        }
-        else{
-          snake.unshift(newPos)
-          if(!change){
-            snake.pop();
-          }else{
-            changeFood();
-            message = "You got a point";
-          } 
-        }
+        snake.unshift(newPos)
+        if(!change){
+          snake.pop();
+        }else{
+          changeFood();
+          message = "You got a point";
+        } 
       }
     }
   }

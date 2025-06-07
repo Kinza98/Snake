@@ -318,7 +318,6 @@ button{
   #home-page h1{
     font-size: 1.8rem;
   }
-
 }
 
 #heading{
@@ -379,6 +378,7 @@ button{
     height: 30px;
     font-size: 16px;
     padding: 0;
+    border-style: solid;
     background: var(--font);
     color: var(--game-base);
   }
