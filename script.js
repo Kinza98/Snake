@@ -227,9 +227,14 @@ window.addEventListener("load", function(){
   // game Flow
   function gameFlow(){
     clearCanvas();
+    moveSnake();
     drawFood();
     drawSnake();
-    moveSnake();
+    
+    if(level === 2 && score === highScore){
+      message = "YOU WONNNNN!";
+      resetFn();
+    }
     if(message !== "")
       snakeError();
     displaySpeedAndLevel();
@@ -240,16 +245,10 @@ window.addEventListener("load", function(){
     if(level == 2)
       drawWalls();
 
-    if(level === 2 && score === highScore){
-      message = "YOU WONNNNN!";
-      resetFn();
-    }
-    if(message !== "")
-      snakeError();
   }
 
   // Start game and keeps it continue
-  let lastTime = 0;
+  let lastTime = performance.now();;
   function gameLoop(currentTime){
     if(!lastTime) 
       lastTime = currentTime
@@ -281,8 +280,8 @@ window.addEventListener("load", function(){
       gameReset();
     else{
       pause = false;
-      resumeGame()
-      gameLoop();
+      resumeGame();
+      requestAnimationFrame(gameLoop)    ;
     }
   }
 
@@ -293,7 +292,6 @@ window.addEventListener("load", function(){
     if(pause)
       return
     let key = event.key;
-    cancelAnimationFrame(gameInterval)
     // snake Moves
     if(key == "ArrowUp"){
       if(direction === "down")
@@ -326,7 +324,8 @@ window.addEventListener("load", function(){
     }else if(key !== "F5"){
       message = "Invalid Key/Movement";
     }
-    gameLoop();
+    cancelAnimationFrame(gameInterval)
+    gameInterval = requestAnimationFrame(gameLoop)
   }
 
   // snake Movement
@@ -437,7 +436,7 @@ window.addEventListener("load", function(){
     if(isGameReset){
       cancelAnimationFrame(gameInterval);
       resumeGame();
-      gameLoop();
+      gameInterval = requestAnimationFrame(gameLoop)
       isGameReset = false;
       pause = false;
     }else{
@@ -450,7 +449,7 @@ window.addEventListener("load", function(){
         canvas.classList.add("pause");
       }else{
         resumeGame();
-        gameLoop();
+        gameInterval = requestAnimationFrame(gameLoop)
       }
     } 
   }
