@@ -46,7 +46,7 @@ button{
 #controls{
   display: flex;
   margin: auto;
-  padding: 1em 2em;
+  padding: 0em 2em 1em 2em;
   flex-direction: row;
   align-items: space-between;
   width: 100%;
@@ -297,7 +297,7 @@ button{
   }
 
   #controls{
-    padding: 1em;
+    padding: 0em 1em 1em 1em;
   }
 
   #controls .btns button{
@@ -321,7 +321,8 @@ button{
 }
 
 #heading{
-  padding: 0 0.5em;
+  display: flex;
+  padding: 0.5em;
 }
 
 #mobile-reset{
@@ -379,7 +380,13 @@ button{
     font-size: 16px;
     padding: 0;
     border-style: solid;
-    background: var(--font);
+    background: transparent;
+    color: var(--orange);
+    border-color: var(--orange);
+  }
+
+  #mobile-reset button:hover{ 
+    background: var(--orange);
     color: var(--game-base);
   }
 
