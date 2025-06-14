@@ -183,6 +183,12 @@ button{
   border-color: var(--orange);
 }
 
+#gameContainer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 /* pause button */
 .setBtns{
   display: flex;
@@ -218,7 +224,7 @@ button{
   text-align: left;
   color: var(--font);
   justify-content: space-between;
-  padding: 0 1em;
+  padding: 0.2em 1em 0 1em;
   font-size: 1.5rem;
 }
 

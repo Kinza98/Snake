@@ -382,13 +382,20 @@ window.addEventListener("load", function(){
   const dpr = window.devicePixelRatio || 1;
 
   // Calculate the number of whole boxes that can fit
-  let h = Math.floor((window.innerHeight - controls.offsetHeight - headingStats.offsetHeight) / gameState.boxSize) * gameState.boxSize;
+  let mh = window.innerHeight - controls.offsetHeight - headingStats.offsetHeight;
+  let h = Math.floor((mh) / gameState.boxSize) * gameState.boxSize;
   let w = Math.floor(window.innerWidth / gameState.boxSize) * gameState.boxSize;
+
+  console.log("window height", window.innerHeight)
+  console.log(" + controls height", controls.offsetHeight)
+  console.log(" + heading height", headingStats.offsetHeight)
+  console.log(" + canvas height", h, mh)
 
   // Set canvas size *in pixels* for high-DPI displays
   canvas.width = w * dpr;
   canvas.height = h * dpr;
-  
+  document.getElementById("gameContainer").style.height = `${mh}px`;
+
   // Make sure food is still visible
   if (gameState.food.x > w - gameState.boxSize) {
     gameState.food.x = w - gameState.boxSize;
