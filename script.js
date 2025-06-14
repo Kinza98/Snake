@@ -374,16 +374,12 @@ window.addEventListener("load", function(){
   canvas.height = h * dpr;
 
   // Set canvas CSS size to the actual display size
-  canvas.style.width = `${w}px`;
+  canvas.style.width = `${w-16}px`;
   canvas.style.height = `${h}px`;
 
   // Scale context
-  ctx.setTransform(1, 0, 0, 1, 0, 0); // reset transform
-  ctx.scale(dpr, dpr);
-
-  // Store size in gameState if needed
-  gameState.canvasWidth = w;
-  gameState.canvasHeight = h;
+  // ctx.setTransform(1, 0, 0, 1, 0, 0); // reset transform
+  // ctx.scale(dpr, dpr);
 
   // Make sure food is still visible
   if (gameState.food.x > w - gameState.boxSize) {
