@@ -206,7 +206,7 @@ window.addEventListener("load", function(){
     let state = false
     gameState.walls.forEach(w => {
       if(w.x === newPos.x && w.y === newPos.y){
-        message = "Oh! You hit with the walls";
+        message = "Oh! You hit the walls";
         state = true
       }
     })

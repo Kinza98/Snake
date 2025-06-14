@@ -343,7 +343,7 @@ button{
 
   #home-page h1{
     font-weight: 100;
-    font-size: 1.3rem;
+    font-size: 1.5rem;
   }
 
   .btns{
@@ -358,5 +358,9 @@ button{
   .setBtns button{
     font-size: 0.8rem;
     padding: 0.5em;
+  }
+
+  #if_err{
+    font-size: 0.8rem;
   }
 }
