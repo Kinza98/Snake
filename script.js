@@ -360,9 +360,22 @@ window.addEventListener("load", function(){
     ctx.fillStyle = "lime"
     ctx.fillText ("Paused", (canvas.width/ 2)-50, (canvas.height/2)+15)
   }
+
+  function adjustBoxSizeForScreen() {
+  const width = window.innerWidth;
+
+  if (width < 400) {
+    gameState.boxSize = 40; // mobile
+  } else if (width < 800) {
+    gameState.boxSize = 30;
+  } else {
+    gameState.boxSize = 20; // desktop
+  }
+}
   
   // reset canvas size
  function canvasResize() {
+  adjustBoxSizeForScreen()
   const dpr = window.devicePixelRatio || 1;
 
   // Calculate the number of whole boxes that can fit
@@ -372,14 +385,11 @@ window.addEventListener("load", function(){
   // Set canvas size *in pixels* for high-DPI displays
   canvas.width = w * dpr;
   canvas.height = h * dpr;
+  
 
   // Set canvas CSS size to the actual display size
   // canvas.style.width = `${w-(2*16)}px`;
-  // canvas.style.height = `${h}px`;
-
-  // Scale context
-  // ctx.setTransform(1, 0, 0, 1, 0, 0); // reset transform
-  // ctx.scale(dpr, dpr);
+  // canvas.style.height = `${h}px`; 
 
   // Make sure food is still visible
   if (gameState.food.x > w - gameState.boxSize) {
