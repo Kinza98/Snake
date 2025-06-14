@@ -290,8 +290,6 @@ window.addEventListener("load", function(){
     let h =  Math.floor((window.innerHeight - controls.offsetHeight - headingStats.offsetHeight - 2)/gameState.boxSize)*gameState.boxSize;
     canvas.height = h;
     canvas.width = Math.floor(window.innerWidth/ gameState.boxSize)*gameState.boxSize;
-
-    drawGame()
   }
 
   // clear canvas
@@ -301,7 +299,10 @@ window.addEventListener("load", function(){
 
   // selects Level
   function chooseLevel(l){
-    level = l
+    gameState.level = l
+    startTime = 1;
+    gameInterval = requestAnimationFrame(drawGame);
+    document.getElementById("home-page").classList.add("d-none")
   }
   this.window.chooseLevel = chooseLevel
 
