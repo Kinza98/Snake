@@ -20,6 +20,7 @@
     <div id="home-page">
       <div>
         <h1>Snake World</h1>
+        <span id="if_err"></span>
         <button id="level-1" onclick="chooseLevel(1)">Easy</button>
         <button id="level-2" onclick="chooseLevel(2)">Hard</button>
         <p id="error"></p>
@@ -32,7 +33,7 @@
       <div id="highScore">Highest: <span>0</span></div>
     </div>
     <!-- game area -->
-    <div class="p-n" id="gameContainer">
+    <div class="p-n">
       <canvas id="canvas" width="400" height="400"></canvas>
     </div>
     <!-- buttons/controls -->

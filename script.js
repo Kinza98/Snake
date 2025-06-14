@@ -156,7 +156,7 @@ window.addEventListener("load", function(){
     }else if(gameState.direction === "right"){
       newPos.x += gameState.boxSize;
     }else{
-      message = "Invalid Key/Movement";
+      message = "Invalid Key/Movement"; // currently this message is not gonna display but can be added this feature as well
       return;
     }
 
@@ -193,7 +193,7 @@ window.addEventListener("load", function(){
           gameState.snake.pop();
         }else{
           // changeFood(); eat food
-          message = "You got a point";
+          message = "You got a point"; // currently this message is not gonna display but can be added this feature as well
         } 
       }
         else
@@ -258,30 +258,30 @@ window.addEventListener("load", function(){
     let key = event.key;
     if(key == "ArrowUp"){
       if(gameState.direction === "down")
-        message = "Invalid move! Snake cannot move backwards."
+        message = "Invalid move! Snake cannot move backwards."  // currently this message is not gonna display but can be added this feature as well
       else{
         gameState.direction = "up"
       }
     }else if(key == "ArrowDown"){
       if(gameState.direction === "up")
-        message = "Invalid move! Snake cannot move backwards."
+        message = "Invalid move! Snake cannot move backwards." // currently this message is not gonna display but can be added this feature as well
       else{
         gameState.direction = "down"
       }
     }else if(key == "ArrowLeft"){
       if(gameState.direction === "right")
-        message = "Invalid move! Snake cannot move backwards."
+        message = "Invalid move! Snake cannot move backwards." // currently this message is not gonna display but can be added this feature as well
       else{
         gameState.direction = "left"
       }
     }else if(key == "ArrowRight"){
       if(gameState.direction === "left")
-        message = "Invalid move! Snake cannot move backwards."
+        message = "Invalid move! Snake cannot move backwards." // currently this message is not gonna display but can be added this feature as well
       else{
         gameState.direction = "right"
       }
     }else if(key !== "F5"){
-      message = "Invalid Key/Movement";
+      message = "Invalid Key/Movement"; // currently this message is not gonna display but can be added this feature as well
     }
   }
 
@@ -329,6 +329,9 @@ window.addEventListener("load", function(){
       gameInterval = requestAnimationFrame(drawGame)
     else if(gameState.gameOver){
       document.getElementById("error").innerText = message;
+      document.getElementById("if_err").innerText = `Score (Level ${
+        gameState.level == 1? 'Easy': 'Hard'
+      }): ${gameState.score}`
       document.getElementById("home-page").classList.remove("d-none")
     }
 
@@ -386,15 +389,10 @@ window.addEventListener("load", function(){
   let h = Math.floor((mh) / gameState.boxSize) * gameState.boxSize;
   let w = Math.floor(window.innerWidth / gameState.boxSize) * gameState.boxSize;
 
-  console.log("window height", window.innerHeight)
-  console.log(" + controls height", controls.offsetHeight)
-  console.log(" + heading height", headingStats.offsetHeight)
-  console.log(" + canvas height", h, mh)
 
   // Set canvas size *in pixels* for high-DPI displays
   canvas.width = w * dpr;
   canvas.height = h * dpr;
-  document.getElementById("gameContainer").style.height = `${mh}px`;
 
   // Make sure food is still visible
   if (gameState.food.x > w - gameState.boxSize) {

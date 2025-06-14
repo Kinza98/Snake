@@ -163,13 +163,19 @@ button{
 }
 
 #home-page h1{
-  margin-bottom: 1em;
+  margin-bottom: 0.2em;
   color: green;
   text-shadow:
     -1px -1px 0 rgb(217, 217, 217),
     1px  1px 0 green;
   font-weight: 800;
   font-size: 2.5rem;
+}
+
+#if_err{
+  color: #d0dcd2;
+  margin-bottom: 0.2em;
+  display: inline-block;
 }
 
 .active{
@@ -224,7 +230,7 @@ button{
   text-align: left;
   color: var(--font);
   justify-content: space-between;
-  padding: 0.2em 1em 0 1em;
+  padding: 0 1em;
   font-size: 1.5rem;
 }
 
