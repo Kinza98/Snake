@@ -19,6 +19,7 @@ window.addEventListener("load", function(){
     walls: [],
     level: 1,
     score: 0,
+    highScore: localStorage.getItem("highestScore") || 0,
     speed: 200,
     direction: "right",
     gameOver: false,
@@ -181,7 +182,11 @@ window.addEventListener("load", function(){
       gameState.speed = 150
     if(gameState.level === 3 )
       gameState.speed = 200
-        console.log(gameState.score)
+
+    if(gameState.score > gameState.highScore){
+      gameState.highScore = gameState.score;
+      localStorage.setItem("highestScore", gameState.highScore.toString());
+    }
 
   }
 
@@ -230,6 +235,7 @@ window.addEventListener("load", function(){
   function syncUI(){
     document.querySelector("#score span").innerText = gameState.score;
     document.querySelector("#level span").innerText = gameState.level;
+    document.querySelector("#highScore span").innerText = gameState.highScore;
   }
 
 
@@ -299,11 +305,38 @@ window.addEventListener("load", function(){
 
   // selects Level
   function chooseLevel(l){
-    gameState.level = l
-    startTime = 1;
-    gameInterval = requestAnimationFrame(drawGame);
-    document.getElementById("home-page").classList.add("d-none")
+    document.getElementById("home-page").classList.add("d-none");
+    resetGame(l);
   }
+
+  function resetGame(l){
+    gameInterval = requestAnimationFrame(drawGame);
+    gameState.level = l;
+    gameState.speed = l === 1 ? 200 : (l === 2 ? 150 : 200); // adjust speed based on level
+    gameState.score = 0;
+    gameState.direction = "right";
+    gameState.state = "run";
+    gameState.gameOver = false;
+    message = "";
+    
+    // Reset snake
+    gameState.snake = [
+      {x:40, y:0},
+      {x:20, y:0},
+      {x:0, y:0}
+    ];
+
+    // Reset food
+    gameState.food = {
+      x: Math.floor((Math.random()*canvas.width)/ gameState.boxSize)*gameState.boxSize,
+      y: Math.floor((Math.random()*canvas.height)/ gameState.boxSize)*gameState.boxSize
+    };
+
+    // Hide home screen and restart game
+    startTime = 0;
+    gameInterval = requestAnimationFrame(drawGame);
+  }
+
   this.window.chooseLevel = chooseLevel
 
   this.window.addEventListener("resize", canvasResize);
