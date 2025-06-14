@@ -363,14 +363,17 @@ window.addEventListener("load", function(){
 
   function adjustBoxSizeForScreen() {
   const width = window.innerWidth;
+  const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-  if (width < 400) {
-    gameState.boxSize = 40; // mobile
-  } else if (width < 800) {
-    gameState.boxSize = 30;
+  if (isMobile && width < 500) {
+    gameState.boxSize = 40; // true mobile
+  } else if (isMobile && width < 800) {
+    gameState.boxSize = 30; // tablets or narrow laptops
   } else {
-    gameState.boxSize = 20; // desktop
+    gameState.boxSize = 20; // wide desktops/laptops
   }
+
+  console.log(gameState.boxSize)
 }
   
   // reset canvas size
@@ -386,11 +389,6 @@ window.addEventListener("load", function(){
   canvas.width = w * dpr;
   canvas.height = h * dpr;
   
-
-  // Set canvas CSS size to the actual display size
-  // canvas.style.width = `${w-(2*16)}px`;
-  // canvas.style.height = `${h}px`; 
-
   // Make sure food is still visible
   if (gameState.food.x > w - gameState.boxSize) {
     gameState.food.x = w - gameState.boxSize;
