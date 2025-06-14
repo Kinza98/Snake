@@ -8,18 +8,34 @@
 }
 
 :root{
-  --main-base: #f0f0f0;
-  --game-base: #f5fff5;
-  --font: #333333; 
+  --main-base: #000;
+  --game-base: #232222;
+  --font: #bababa; 
   --green: #32CD32;
   --orange: #FF5722 ;
 }
 
+/* displays error */
 #error{
   color: var(--orange);
   margin-bottom: 1em;
 }
 
+/* normal padding */
+.p-n{
+  padding: 0 1em;
+}
+
+/* colors to reuse */
+.t-green{
+  color: var(--green);
+}
+
+.t-orange{
+  color: var(--orange);
+}
+
+/* body */
 body{
   background-color: var(--main-base);
   text-align: center;
@@ -27,14 +43,17 @@ body{
   color: var(--font);
 }
 
+/* button common style */
 button{
   cursor: pointer;
 }
 
+/* hides item */
 .d-none{
   display: none !important;
 }
 
+/* main game canvas */
 #canvas{
   width: 100%;
   border: 2px solid var(--green);
@@ -43,15 +62,23 @@ button{
   margin: auto;
 }
 
+/* control buttons */
 #controls{
   display: flex;
   margin: auto;
-  padding: 0em 2em 1em 2em;
-  flex-direction: row;
-  align-items: space-between;
+  padding: 0em 1em 1em 1em;
+  flex-direction: column;
   width: 100%;
   align-items: center;
   justify-content: space-between;
+}
+
+#controls .btns{
+  padding-top: 0.5em;
+}
+
+#controls .btns button:first-child{
+  margin-bottom: 4px;
 }
 
 #controls .btns button{
@@ -61,8 +88,8 @@ button{
   font-size: 16px;
   border: 1px solid white;
   border-radius: 0;
-  width: 4em;
-  height: 2em;
+  width: 8em;
+  height: 2.5em;
   outline: none;
   box-shadow: none;
   font-family: sans-serif;
@@ -82,8 +109,8 @@ button{
   flex-direction: column;
 }
 
-
- #home-page{
+/* main page when game loads */
+#home-page{
   position: fixed;
   top: 0;
   left: 0;
@@ -124,7 +151,7 @@ button{
   width: 200px;
 }
 
-#home-page button:hover{
+#home-page button:hover:enabled {
   border-color: var(--game-base);
 }
 
@@ -134,109 +161,88 @@ button{
   cursor: not-allowed;
 }
 
+#home-page h1{
+  margin-bottom: 1em;
+  color: transparent;
+  color: transparent; /* fallback for Firefox */
+  text-shadow:
+    -1px -1px 0 green,
+    1px  1px 0 green;
+  font-weight: 800;
+  font-size: 2.5rem;
+}
+
 .active{
-  background-color: var(--green) !important;
+  background-color: green !important;
   border-color: var(--green) !important;
-  color: var(--game-base) !important;
+  color: var(--font) !important;
 }
 
 #home-page #resume{
   background-color: var(--orange);
   border-color: var(--orange);
-  /* background-color: transparent */
 }
 
-#home-page button:hover{
-  border-color: var(--font);
-}
-
-
-/*
-#alert div{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: white;
-  border-radius: 10px;
-  width: 200px;
-  color: black;
-  padding: 20px;
-} */
-
-/* #alert button{
-  margin-left: auto;
-  background: black;
-  color: white;
-  padding: 5px 10px;
-  border-radius: 5px;
-  outline: none;
-  box-shadow: none;
-  margin-top: 10px;
-} */
-
-#error-content{
-  color: var(--orange);
-  font-weight: 100;
-  font-size: 15px;
-  height: 20px;
-}
-
+/* pause button */
 .setBtns{
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 .setBtns button{
-  background-color: transparent;
+  background-color: var(--green);
   border: 2px solid var(--green);
-  color: #333333;
+  color: var(--game-base);
   font-size: 1rem;
   padding: 10px 16px;
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
-  width: 100px;
+  width: 100%;
 }
 
 .setBtns button:hover{
-  background-color: var(--green);
-  color: #ffffff;
+  background-color: green;
+  color: var(--green);
 }
 
 .setBtns button:nth-child(1){
   margin-bottom: 5px;
 }
 
+/* stats displaying on top of game */
 .stats{
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   text-align: left;
-  font-size: 1.1rem;
   color: var(--font);
+  justify-content: space-between;
+  padding: 0 1em;
+  font-size: 1.5rem;
 }
 
 .stats div {
   padding: 2px 2px;
 }
 
-#score span,
-#speed span{
+#score span{
   color: var(--green);
-}
-
-#level span{
-  color: var(--orange);
   font-weight: bold;
 }
 
+#level span, 
+#highScore span{
+  color: var(--font);
+}
 
 #canvas.pause{
   background-color: #e9ebe9;
+  filter: grayscale(100%)
 }
 
+/* pre loader */
 #pre-loader{
-  /* background-image: url(snake.jpg); */
   background-attachment: fixed;
   background-repeat: no-repeat;
   background-size: cover;
@@ -256,14 +262,6 @@ button{
   height: 100%;
   background-color: #000000;
   color: var(--main-base);
-}
-
-#home-page h1{
-  margin-bottom: 1em;
-  color: transparent;
-  -webkit-text-stroke: 1px var(--green);
-  -webkit-text-stroke-width: thick;
-  font-weight: 800;
 }
 
 #loader{
@@ -286,14 +284,14 @@ button{
 }
 
 @media screen and (max-width: 500px) {
-  .stats, .setBtns button{
-    font-size: 0.9rem;
+  .stats{
+    font-size: 1.2rem;
   }
-
+  
   .setBtns button{
     border-radius: 5px;
     padding: 7px 5px;
-    width: 70px;
+    font-size: 1rem;
   }
 
   #controls{
@@ -301,11 +299,7 @@ button{
   }
 
   #controls .btns button{
-    width: 3em;
-  }
-
-  #error-content{
-    font-size: 14px;
+    width: 6em;
   }
 
   #home-page button{
@@ -320,18 +314,7 @@ button{
   }
 }
 
-#heading{
-  display: flex;
-  padding: 0.5em;
-}
-
-#mobile-reset{
-  display: none !important;
-}
-
-
 @media screen and (max-width: 400px) {
-
   #controls{
     flex-wrap: wrap;
   }
@@ -340,59 +323,25 @@ button{
     width: 100%;
     flex-direction: row;
     justify-content: space-between;
-    margin-bottom: 10px;
-  }
-
-  #error-content{
-    font-size: 13px;
+    font-size: 1rem;
   }
 
   #home-page h1{
     font-weight: 100;
     font-size: 1.3rem;
   }
-  .setBtns{
-    display: none;
-  }
 
   .btns{
     width: 100%;
     position: relative;
   }
-
-  #mobile-reset{
-    text-align: left;
-    /* position: absolute;
-    left: 0;
-    top: 0;     */
-    display: block !important;
-  }
-
   
   #controls .btns button{
     width: 5em;
   }
-
-  #mobile-reset button{ 
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    font-size: 16px;
-    padding: 0;
-    border-style: solid;
-    background: transparent;
-    color: var(--orange);
-    border-color: var(--orange);
+  
+  .setBtns button{
+    font-size: 0.8rem;
+    padding: 0.5em;
   }
-
-  #mobile-reset button:hover{ 
-    background: var(--orange);
-    color: var(--game-base);
-  }
-
-  #home-page h1{
-    -webkit-text-stroke: 0px;
-    color: var(--green);
-  }
-
 }

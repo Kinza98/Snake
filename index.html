@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en-us">
   <head>
-    <title>Snake Game</title>
     <meta charset="UTF-8" />
+    <title>Snake Game</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="kinza" />
     <meta name="keywords" content="canvas, game, snake" />
@@ -10,67 +10,63 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <!-- Loader displays until pages load -->
     <div id="pre-loader">
       <div id="flex">
         <div id="loader"></div>
       </div>
     </div>
-    <div id="home-page" >
+    <!-- main page appears first -->
+    <div id="home-page">
       <div>
         <h1>Snake World</h1>
-        <button id="level-1" onclick="startGame(1)">Level 1</button>
-        <button id="level-2" onclick="startGame(2)" disabled>Level 2</button>
-        <button id="resume" class="d-none" onclick="startGame('resume')">Resume</button>
+        <button id="level-1" onclick="chooseLevel(1)">Level 1</button>
+        <button id="level-2" onclick="chooseLevel(2)" disabled>Level 2</button>
+        <button id="level-3" onclick="chooseLevel(3)" disabled>Level 3</button>
         <p id="error"></p>
       </div>
     </div>
-    <canvas id="canvas" width="400" height="400"></canvas>
-    <div id="heading">
-        <div id="mobile-reset">
-            <button onclick="resetBtnFn()">||</button>
-        </div>
-      <div id="error-content"></div>
+    <!-- stats of game -->
+    <div class="stats">
+      <div id="highScore">Best: <span>0</span></div>
+      <div id="score">Score: <span>0</span></div>
+      <div id="level">Level: <span>1</span></div>
     </div>
+    <!-- game area -->
+    <div class="p-n">
+      <canvas id="canvas" width="400" height="400"></canvas>
+    </div>
+    <!-- buttons/controls -->
     <div id="controls">
-      <div class="stats">
-        <div id="score">Score: <span>0</span></div>
-        <div id="level"><span>1</span></div>
-        <div id="speed">Speed: <span>0</span></div>
+      <div class="setBtns">
+        <button onclick="pauseFn()" id="pause">Pause</button>
       </div>
       <div class="btns">
         <button 
           onmousedown="controlBtn('ArrowUp')"
           ontouchstart="controlBtn('ArrowUp')"
-          onmouseup="resetSpeed()"
-          ontouchend="resetSpeed()"
+          aria-label="Move Up"
         >&uarr;</button>
         <div>
           <button 
-          
             onmousedown="controlBtn('ArrowLeft')"
             ontouchstart="controlBtn('ArrowLeft')"
-            onmouseup="resetSpeed()"
-            ontouchend="resetSpeed()"
+            aria-label="Move Left"
           >&larr;</button>
           <button 
             onmousedown="controlBtn('ArrowDown')"
             ontouchstart="controlBtn('ArrowDown')"
-            onmouseup="resetSpeed()"
-            ontouchend="resetSpeed()"
+            aria-label="Move Down"
           >&darr;</button>
           <button 
           onmousedown="controlBtn('ArrowRight')"
           ontouchstart="controlBtn('ArrowRight')"
-          onmouseup="resetSpeed()"
-          ontouchend="resetSpeed()"
+          aria-label="Move Right"
           >&rarr;</button>
         </div>
       </div>
-      <div class="setBtns">
-        <button onclick="pauseFn()" id="pause">Pause</button>
-        <button onclick="resetBtnFn()">Reset</button>
-      </div>
     </div>
+    <!-- script -->
     <script src="script.js"></script>
   </body>
 </html>
