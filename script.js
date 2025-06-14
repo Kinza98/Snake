@@ -366,7 +366,7 @@ window.addEventListener("load", function(){
   const dpr = window.devicePixelRatio || 1;
 
   // Calculate the number of whole boxes that can fit
-  let h = Math.floor((window.innerHeight - controls.offsetHeight - headingStats.offsetHeight - 2) / gameState.boxSize) * gameState.boxSize;
+  let h = Math.floor((window.innerHeight - controls.offsetHeight - headingStats.offsetHeight) / gameState.boxSize) * gameState.boxSize;
   let w = Math.floor(window.innerWidth / gameState.boxSize) * gameState.boxSize;
 
   // Set canvas size *in pixels* for high-DPI displays
@@ -374,8 +374,8 @@ window.addEventListener("load", function(){
   canvas.height = h * dpr;
 
   // Set canvas CSS size to the actual display size
-  canvas.style.width = `${w-16}px`;
-  canvas.style.height = `${h}px`;
+  // canvas.style.width = `${w-(2*16)}px`;
+  // canvas.style.height = `${h}px`;
 
   // Scale context
   // ctx.setTransform(1, 0, 0, 1, 0, 0); // reset transform

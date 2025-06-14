@@ -41,6 +41,7 @@ body{
   text-align: center;
   font-family: sans-serif;
   color: var(--font);
+  height: 100vh;
 }
 
 /* button common style */
@@ -86,7 +87,7 @@ button{
   background-color: var(--orange);
   color: white;
   font-size: 16px;
-  border: 1px solid white;
+  border: none;
   border-radius: 0;
   width: 8em;
   height: 2.5em;
@@ -298,7 +299,7 @@ button{
   }
 
   #controls{
-    padding: 0em 1em 1em 1em;
+    padding: 0em 1em 0.5em 1em;
   }
 
   #controls .btns button{
