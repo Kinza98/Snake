@@ -230,7 +230,7 @@ button{
   text-align: left;
   color: var(--font);
   justify-content: space-between;
-  padding: 0 1em;
+  padding: 0.3em 1em 0.2em 1em;
   font-size: 1.5rem;
 }
 
@@ -248,7 +248,7 @@ button{
 }
 
 #highScore span{
-  color: var(--font);
+  color: var(--green);
 }
 
 #canvas.pause{
