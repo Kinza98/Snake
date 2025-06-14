@@ -19,7 +19,7 @@ window.addEventListener("load", function(){
     walls: [],
     level: 1,
     score: 0,
-    highScore: localStorage.getItem("highestScore") || 0,
+    highScore: 0,
     speed: 200,
     direction: "right",
     gameOver: false,
@@ -29,6 +29,8 @@ window.addEventListener("load", function(){
     x: Math.floor((Math.random()*canvas.width)/ gameState.boxSize)*gameState.boxSize,
     y: Math.floor((Math.random()*canvas.height)/ gameState.boxSize)*gameState.boxSize
   }
+
+  gameState.highScore = gameState.level === 1 ? (localStorage.getItem("e_highestScore") || 0) : (localStorage.getItem("h_highestScore") || 0)
 
   // draws snake
   function drawSnake(){
@@ -52,6 +54,68 @@ window.addEventListener("load", function(){
       }
     })
   }
+  
+  // store wall coordinates into wall variable
+  function createWalls(){
+    let nWall = Math.floor(Math.random()*2)+3 // 3-5
+    for(let j = 0; j<nWall; j++){
+      let wallLength = Math.floor(Math.random()*3)+5  // 5-7
+      let wallType = Math.floor(Math.random()*3)
+      let s = wallLength * gameState.boxSize;
+      let newWall = getWall(wallType, s); 
+      let x = newWall.x;
+      let y = newWall.y;
+      for(let i =0; i<wallLength; i++){
+        if(wallType == 0)
+          gameState.walls.push({x:x+i*gameState.boxSize, y:y})
+        else if(wallType == 1)
+          gameState.walls.push({x:x, y:y+i*gameState.boxSize})
+        else if(wallType == 2){
+          gameState.walls.push({x:x+i*gameState.boxSize, y:y})
+          gameState.walls.push({x:x, y:y+i*gameState.boxSize})
+        }
+      }
+    }
+  }
+  
+  // functions that return wall coordinates
+  function getWall(wallType, s){
+    let x, y;
+    if(wallType == 0){
+      x = Math.floor((Math.random()*(canvas.width - s-3)/gameState.boxSize)+3)*gameState.boxSize;
+      y = (Math.floor(Math.random()*((canvas.height/gameState.boxSize)-3))+3)*gameState.boxSize
+    }else if(wallType == 1){
+      x = (Math.floor(Math.random()*((canvas.width/gameState.boxSize)-3))+3)*gameState.boxSize;
+      y = Math.floor(Math.random()*(canvas.height - s)/gameState.boxSize)*gameState.boxSize
+    }else if(wallType == 2){
+      x = Math.floor((Math.random()*(canvas.width - s-3)/gameState.boxSize)+3)*gameState.boxSize;
+      y = Math.floor((Math.random()*(canvas.height - s-3)/gameState.boxSize)+3)*gameState.boxSize
+    }
+    gameState.walls.forEach(wall => {
+      if(wall.x === x && wall.y === y) getWall(wallType, s)
+    })
+    return {x, y}
+  }
+
+  // draw walls
+  function drawWalls(){
+    ctx.beginPath();
+    ctx.fillStyle = "#5e0101";
+    ctx.strokeStyle = "brown";
+    gameState.walls.forEach(wall => {
+      ctx.rect(wall.x, wall.y, gameState.boxSize, gameState.boxSize);
+      ctx.fill();
+      ctx.stroke();
+  })
+  }
+
+  // when level changes to level 2, level 2 button should be enabled
+  function enableLevels(){
+    if(level === 2){
+      document.getElementById("level-2").disabled = false
+    }
+  }
+
 
   // draws food
   function drawFood(){
@@ -96,8 +160,6 @@ window.addEventListener("load", function(){
       return;
     }
 
-    change = checkFoodCollision(newPos)
-
     // if collide with walls
     if(newPos.y < 0 || newPos.y >= canvas.height || newPos.x < 0 || newPos.x >= canvas.width){
       if (newPos.x >= canvas.width) {
@@ -112,6 +174,8 @@ window.addEventListener("load", function(){
         newPos.y = canvas.height - gameState.boxSize;
       }
     }
+    
+    change = checkFoodCollision(newPos)
     
     // if position changed then change the snake
     if(!(gameState.snake[0].x === newPos.x && gameState.snake[0].y === newPos.y)){
@@ -142,7 +206,7 @@ window.addEventListener("load", function(){
     let state = false
     gameState.walls.forEach(w => {
       if(w.x === newPos.x && w.y === newPos.y){
-        message = "Oh! You hit yourself";
+        message = "Oh! You hit with the walls";
         state = true
       }
     })
@@ -173,19 +237,16 @@ window.addEventListener("load", function(){
 
   function updateScore(){
     gameState.score++;
-    if(gameState.score > 5)
-      gameState.level =2;
-    else if(gameState.score >10)
-      gameState.level = 3
-
-    if(gameState.level === 2)
+    if(gameState.score > 10)
       gameState.speed = 150
-    if(gameState.level === 3 )
-      gameState.speed = 200
+    if(gameState.score > 20)
+      gameState.speed = 120
 
     if(gameState.score > gameState.highScore){
       gameState.highScore = gameState.score;
-      localStorage.setItem("highestScore", gameState.highScore.toString());
+      gameState.level === 1 ? 
+      localStorage.setItem("e_highestScore", gameState.highScore.toString()): 
+      localStorage.setItem("h_highestScore", gameState.highScore.toString());
     }
 
   }
@@ -234,8 +295,9 @@ window.addEventListener("load", function(){
 
   function syncUI(){
     document.querySelector("#score span").innerText = gameState.score;
-    document.querySelector("#level span").innerText = gameState.level;
-    document.querySelector("#highScore span").innerText = gameState.highScore;
+    document.querySelector("#level span").innerText = gameState.level === 1 ? "Easy":"Hard";
+    document.querySelector("#highScore span").innerText = 
+    gameState.level === 1 ? (localStorage.getItem("e_highestScore") || 0) : (localStorage.getItem("h_highestScore") || 0);
   }
 
 
@@ -250,6 +312,14 @@ window.addEventListener("load", function(){
     drawFood();
     syncUI();
 
+    if(gameState.level === 2)
+      drawWalls();
+    
+    if(gameState.state === "pause"){
+      pauseText()
+      return;
+    }
+    
     if(currentTime-startTime > gameState.speed){
       moveSnake();
       startTime = currentTime;
@@ -261,6 +331,7 @@ window.addEventListener("load", function(){
       document.getElementById("error").innerText = message;
       document.getElementById("home-page").classList.remove("d-none")
     }
+
   }
 
   
@@ -269,9 +340,8 @@ window.addEventListener("load", function(){
     gameState.state = gameState.state === "run" ? "pause": "run";
     if(gameState.state === "pause"){
         pauseBtn.innerText = "Play";
-        pauseBtn.classList.add("active");      
-        cancelAnimationFrame(gameInterval);
-        pauseText()
+        pauseBtn.classList.add("active");     
+        // cancelAnimationFrame(gameInterval);
     } 
     else{
       pauseBtn.innerText = "Pause";
@@ -283,6 +353,7 @@ window.addEventListener("load", function(){
   window.pauseFn = pauseFn;
 
   function pauseText(){
+    ctx.beginPath();
     ctx.font = "30px Arial";
     ctx.fillStyle = "#000000bf";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -291,12 +362,38 @@ window.addEventListener("load", function(){
   }
   
   // reset canvas size
-  function canvasResize(){
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
-    let h =  Math.floor((window.innerHeight - controls.offsetHeight - headingStats.offsetHeight - 2)/gameState.boxSize)*gameState.boxSize;
-    canvas.height = h;
-    canvas.width = Math.floor(window.innerWidth/ gameState.boxSize)*gameState.boxSize;
+ function canvasResize() {
+  const dpr = window.devicePixelRatio || 1;
+
+  // Calculate the number of whole boxes that can fit
+  let h = Math.floor((window.innerHeight - controls.offsetHeight - headingStats.offsetHeight - 2) / gameState.boxSize) * gameState.boxSize;
+  let w = Math.floor(window.innerWidth / gameState.boxSize) * gameState.boxSize;
+
+  // Set canvas size *in pixels* for high-DPI displays
+  canvas.width = w * dpr;
+  canvas.height = h * dpr;
+
+  // Set canvas CSS size to the actual display size
+  canvas.style.width = `${w}px`;
+  canvas.style.height = `${h}px`;
+
+  // Scale context
+  ctx.setTransform(1, 0, 0, 1, 0, 0); // reset transform
+  ctx.scale(dpr, dpr);
+
+  // Store size in gameState if needed
+  gameState.canvasWidth = w;
+  gameState.canvasHeight = h;
+
+  // Make sure food is still visible
+  if (gameState.food.x > w - gameState.boxSize) {
+    gameState.food.x = w - gameState.boxSize;
   }
+  if (gameState.food.y > h - gameState.boxSize) {
+    gameState.food.y = h - gameState.boxSize;
+  }
+}
+
 
   // clear canvas
   function clearCanvas(){
@@ -312,7 +409,6 @@ window.addEventListener("load", function(){
   function resetGame(l){
     gameInterval = requestAnimationFrame(drawGame);
     gameState.level = l;
-    gameState.speed = l === 1 ? 200 : (l === 2 ? 150 : 200); // adjust speed based on level
     gameState.score = 0;
     gameState.direction = "right";
     gameState.state = "run";
@@ -331,6 +427,11 @@ window.addEventListener("load", function(){
       x: Math.floor((Math.random()*canvas.width)/ gameState.boxSize)*gameState.boxSize,
       y: Math.floor((Math.random()*canvas.height)/ gameState.boxSize)*gameState.boxSize
     };
+
+    if(gameState.level === 2)
+      createWalls()
+    else
+      gameState.walls.length = 0;
 
     // Hide home screen and restart game
     startTime = 0;

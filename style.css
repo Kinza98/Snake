@@ -231,7 +231,10 @@ button{
   font-weight: bold;
 }
 
-#level span, 
+#level span{
+  color: var(--green);
+}
+
 #highScore span{
   color: var(--font);
 }
