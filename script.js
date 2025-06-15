@@ -181,7 +181,6 @@ window.addEventListener("load", function(){
     if(!(gameState.snake[0].x === newPos.x && gameState.snake[0].y === newPos.y)){
       // self collision
       gameState.gameOver = checkSelfCollision(newPos)  
-      console.log("self", gameState.gameOver)
       
       // wall collision 
       if(gameState.walls.length > 0)
@@ -358,7 +357,7 @@ window.addEventListener("load", function(){
   function pauseText(){
     ctx.beginPath();
     ctx.font = "30px Arial";
-    ctx.fillStyle = "#000000bf";
+    ctx.fillStyle = "#0000009e";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "lime"
     ctx.fillText ("Paused", (canvas.width/ 2)-50, (canvas.height/2)+15)
@@ -375,8 +374,6 @@ window.addEventListener("load", function(){
   } else {
     gameState.boxSize = 20; // wide desktops/laptops
   }
-
-  console.log(gameState.boxSize)
 }
   
   // reset canvas size
@@ -437,8 +434,10 @@ window.addEventListener("load", function(){
       y: Math.floor((Math.random()*canvas.height)/ gameState.boxSize)*gameState.boxSize
     };
 
-    if(gameState.level === 2)
+    if(gameState.level === 2){
+      gameState.walls.length = 0;
       createWalls()
+    }
     else
       gameState.walls.length = 0;
 
