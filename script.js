@@ -465,9 +465,9 @@ window.addEventListener("load", function(){
 
     // Hide home screen and restart game
     startTime = 0;
-    // startTimer()
+    startTimer()
     setInterval(()=> {
-    // document.getElementById("timer").classList.add("d-none");
+    document.getElementById("timer").classList.add("d-none");
     gameInterval = requestAnimationFrame(drawGame);
     }, 3000)
   }
