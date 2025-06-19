@@ -12,7 +12,7 @@
   --game-base: #232222;
   --font: #bababa; 
   --green: #32CD32;
-  --orange: #FF5722 ;
+  --orange: #ff5722 ;
 }
 
 /* displays error */
@@ -100,7 +100,7 @@ button{
 
 #controls .btns button:hover,
 #controls .btns button:disabled{
-  background-color: #d53502;
+  background-color: #bf360c;
 }
 
 #controls .btns{
@@ -124,11 +124,12 @@ button{
   align-items: center;
   justify-content: center;
   padding: 2em;
-  background-image: url(snake.png);
+  background-image: url(snakebg.jpg);
   background-repeat: no-repeat;
-  background-position: right;
-  background-blend-mode: hard-light;
-  background-size: 29%;
+  background-position: 100% 100%;
+  background-blend-mode: color-burn;
+  background-size: cover;
+  background-color: #4CAF50;
 }
 
 #home-page > div{  
@@ -139,9 +140,9 @@ button{
 }
 
 #home-page button{
-  background-color: var(--green);
+  background-color: var(--main-base);
   padding: 1em 2em;
-  color: var(--game-base);
+  color: var(--green);
   font-size: 1rem;
   border-radius: 5px;
   box-shadow: none;
@@ -164,10 +165,8 @@ button{
 
 #home-page h1{
   margin-bottom: 0.2em;
-  color: green;
-  text-shadow:
-    -1px -1px 0 rgb(217, 217, 217),
-    1px  1px 0 green;
+  color: var(--green);
+  text-shadow: -1px -1px 0 #000000, 1px 1px 0 #d0d0d0;
   font-weight: 800;
   font-size: 2.5rem;
 }
@@ -254,6 +253,60 @@ button{
 #canvas.pause{
   background-color: #e9ebe9;
   filter: grayscale(100%)
+}
+
+/* timer */
+#timer{
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: fixed;
+  z-index: 101;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #000000d9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#count{
+  color: var(--orange);
+  font-size: 5rem;
+}
+
+#count-loader{
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#count-loader div{
+  width: 120px;
+  height: 120px;
+  background-color: transparent;
+  border: 6px solid rgb(255, 255, 255);
+  border-top-color: var(--orange);
+  border-radius: 50%;
+  transform: rotate(0deg);
+  animation: spinner-count 1s 1s linear infinite;
+}
+@keyframes spinner-count {
+  from{
+    transform: rotate(0deg);
+  }
+  to{
+    transform: rotate(360deg);
+  }
 }
 
 /* pre loader */
@@ -362,5 +415,15 @@ button{
 
   #if_err{
     font-size: 0.8rem;
+  }
+
+  #count-loader div{
+    width: 100px;
+    height: 100px;
+    border-width: 5px;
+  }
+
+  #count{
+    font-size: 4rem;
   }
 }

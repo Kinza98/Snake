@@ -60,7 +60,7 @@ window.addEventListener("load", function(){
     let nWall = Math.floor(Math.random()*2)+3 // 3-5
     for(let j = 0; j<nWall; j++){
       let wallLength = Math.floor(Math.random()*3)+5  // 5-7
-      let wallType = Math.floor(Math.random()*3)
+      let wallType = Math.random() < 0.6 ? Math.floor(Math.random()*3) : Math.floor(Math.random()*2)
       let s = wallLength * gameState.boxSize;
       let newWall = getWall(wallType, s); 
       let x = newWall.x;
@@ -83,16 +83,18 @@ window.addEventListener("load", function(){
     let x, y;
     if(wallType == 0){
       x = Math.floor((Math.random()*(canvas.width - s-3)/gameState.boxSize)+3)*gameState.boxSize;
-      y = (Math.floor(Math.random()*((canvas.height/gameState.boxSize)-3))+3)*gameState.boxSize
+      y = (Math.floor(Math.random()*((canvas.height/gameState.boxSize)-1))+1)*gameState.boxSize
     }else if(wallType == 1){
       x = (Math.floor(Math.random()*((canvas.width/gameState.boxSize)-3))+3)*gameState.boxSize;
-      y = Math.floor(Math.random()*(canvas.height - s)/gameState.boxSize)*gameState.boxSize
+      y = (Math.floor(Math.random()*(canvas.height - s-1)/gameState.boxSize)+1)*gameState.boxSize
     }else if(wallType == 2){
       x = Math.floor((Math.random()*(canvas.width - s-3)/gameState.boxSize)+3)*gameState.boxSize;
-      y = Math.floor((Math.random()*(canvas.height - s-3)/gameState.boxSize)+3)*gameState.boxSize
+      y = Math.floor((Math.random()*(canvas.height - s-1)/gameState.boxSize)+1)*gameState.boxSize
     }
     gameState.walls.forEach(wall => {
-      if(wall.x === x && wall.y === y) getWall(wallType, s)
+      if(Math.abs(wall.x - x) < gameState.boxSize * 2 &&
+          Math.abs(wall.y - y) < gameState.boxSize * 2)  
+          getWall(wallType, s)
     })
     return {x, y}
   }
@@ -236,10 +238,14 @@ window.addEventListener("load", function(){
 
   function updateScore(){
     gameState.score++;
-    if(gameState.score > 10)
-      gameState.speed = 150
-    if(gameState.score > 20)
+    console.log("update",gameState.score > 5 )
+    if(gameState.score > 5 && gameState.level === 1)
       gameState.speed = 120
+    if(gameState.level === 2)
+      gameState.speed = 150;
+
+    gameState.highScore = gameState.level === 1 ? (localStorage.getItem("e_highestScore") || 0):
+    (localStorage.getItem("h_highestScore") || 0);
 
     if(gameState.score > gameState.highScore){
       gameState.highScore = gameState.score;
@@ -306,6 +312,7 @@ window.addEventListener("load", function(){
 
   // game
   function drawGame(currentTime){
+    console.log(gameState.speed)
     clearCanvas()
     drawSnake();
     drawFood();
@@ -341,9 +348,8 @@ window.addEventListener("load", function(){
     let pauseBtn = document.getElementById("pause")
     gameState.state = gameState.state === "run" ? "pause": "run";
     if(gameState.state === "pause"){
-        pauseBtn.innerText = "Play";
-        pauseBtn.classList.add("active");     
-        // cancelAnimationFrame(gameInterval);
+      pauseBtn.innerText = "Play";
+      pauseBtn.classList.add("active");     
     } 
     else{
       pauseBtn.innerText = "Pause";
@@ -362,6 +368,7 @@ window.addEventListener("load", function(){
     ctx.fillStyle = "lime"
     ctx.fillText ("Paused", (canvas.width/ 2)-50, (canvas.height/2)+15)
   }
+
 
   function adjustBoxSizeForScreen() {
   const width = window.innerWidth;
@@ -400,26 +407,41 @@ window.addEventListener("load", function(){
   }
 }
 
-
   // clear canvas
   function clearCanvas(){
     ctx.clearRect(0, 0, canvas.width, canvas.height)
+  }
+
+  // timer
+  function startTimer(){
+    document.getElementById("timer").classList.remove("d-none");
+    setInterval(() => {
+      document.getElementById("count").innerText = "2"
+    }, 1000);
+    setInterval(() => {
+      document.getElementById("count").innerText = "1"
+    }, 2000);
+    setInterval(() => {
+      document.getElementById("count").innerText = "0"
+    }, 2900);
   }
 
   // selects Level
   function chooseLevel(l){
     document.getElementById("home-page").classList.add("d-none");
     resetGame(l);
+    
   }
 
   function resetGame(l){
-    gameInterval = requestAnimationFrame(drawGame);
+    // gameInterval = requestAnimationFrame(drawGame);
     gameState.level = l;
     gameState.score = 0;
     gameState.direction = "right";
     gameState.state = "run";
     gameState.gameOver = false;
     message = "";
+    gameState.speed = 150;
     
     // Reset snake
     gameState.snake = [
@@ -443,7 +465,11 @@ window.addEventListener("load", function(){
 
     // Hide home screen and restart game
     startTime = 0;
+    // startTimer()
+    setInterval(()=> {
+    // document.getElementById("timer").classList.add("d-none");
     gameInterval = requestAnimationFrame(drawGame);
+    }, 3000)
   }
 
   this.window.chooseLevel = chooseLevel
