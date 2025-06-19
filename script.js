@@ -238,11 +238,12 @@ window.addEventListener("load", function(){
 
   function updateScore(){
     gameState.score++;
-    console.log("update",gameState.score > 5 )
-    if(gameState.score > 5 && gameState.level === 1)
+    if(gameState.score > 10 && gameState.level === 1)
+      gameState.speed = 150
+else if(gameState.score > 20 && gameState.level === 1)
       gameState.speed = 120
     if(gameState.level === 2)
-      gameState.speed = 150;
+      gameState.speed = 200;
 
     gameState.highScore = gameState.level === 1 ? (localStorage.getItem("e_highestScore") || 0):
     (localStorage.getItem("h_highestScore") || 0);
@@ -441,7 +442,7 @@ window.addEventListener("load", function(){
     gameState.state = "run";
     gameState.gameOver = false;
     message = "";
-    gameState.speed = 150;
+    gameState.speed = 200;
     
     // Reset snake
     gameState.snake = [
