@@ -313,7 +313,6 @@ else if(gameState.score > 20 && gameState.level === 1)
 
   // game
   function drawGame(currentTime){
-    console.log(gameState.speed)
     clearCanvas()
     drawSnake();
     drawFood();
