@@ -164,7 +164,7 @@ button{
 }
 
 #home-page h1{
-  margin-bottom: 0.2em;
+  margin-bottom: 0.4em;
   color: var(--green);
   text-shadow: -1px -1px 0 #000000, 1px 1px 0 #d0d0d0;
   font-weight: 800;
@@ -256,6 +256,7 @@ button{
 }
 
 /* timer */
+
 #timer{
   background-attachment: fixed;
   background-repeat: no-repeat;
@@ -339,7 +340,7 @@ button{
   border-radius: 50%;
   border-color: var(--green);
   border-style: dotted;
-  animation: spinLoader 1.5s 1.5s linear infinite;
+  animation: spinLoader 1.5s 0s linear infinite;
 }
 
 @keyframes spinLoader {
