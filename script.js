@@ -416,13 +416,13 @@ else if(gameState.score > 20 && gameState.level === 1)
   // timer
   function startTimer(){
     document.getElementById("timer").classList.remove("d-none");
-    setInterval(() => {
+    setTimeout(() => {
       document.getElementById("count").innerText = "2"
     }, 1000);
-    setInterval(() => {
+    setTimeout(() => {
       document.getElementById("count").innerText = "1"
     }, 2000);
-    setInterval(() => {
+    setTimeout(() => {
       document.getElementById("count").innerText = "0"
     }, 2900);
   }
@@ -467,7 +467,7 @@ else if(gameState.score > 20 && gameState.level === 1)
     // Hide home screen and restart game
     startTime = 0;
     startTimer()
-    setInterval(()=> {
+    setTimeout(()=> {
     document.getElementById("timer").classList.add("d-none");
     gameInterval = requestAnimationFrame(drawGame);
     }, 3000)
