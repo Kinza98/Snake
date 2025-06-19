@@ -274,7 +274,7 @@ button{
 
 #count{
   color: var(--orange);
-  font-size: 5rem;
+  font-size: 4rem;
 }
 
 #count-loader{
@@ -298,7 +298,7 @@ button{
   border-top-color: var(--orange);
   border-radius: 50%;
   transform: rotate(0deg);
-  animation: spinner-count 1s 1s linear infinite;
+  animation: spinner-count 1s 0s linear infinite;
 }
 @keyframes spinner-count {
   from{
@@ -333,13 +333,13 @@ button{
 }
 
 #loader{
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
   border: 10px solid var(--game-base);
   border-radius: 50%;
-  border-top-color: var(--green);
+  border-color: var(--green);
   border-style: dotted;
-  animation: spinLoader 1s 1s linear infinite;
+  animation: spinLoader 1.5s 1.5s linear infinite;
 }
 
 @keyframes spinLoader {
@@ -395,7 +395,6 @@ button{
   }
 
   #home-page h1{
-    font-weight: 100;
     font-size: 1.5rem;
   }
 
@@ -424,6 +423,6 @@ button{
   }
 
   #count{
-    font-size: 4rem;
+    font-size: 3rem;
   }
 }
