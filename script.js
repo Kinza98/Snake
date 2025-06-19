@@ -336,7 +336,7 @@ else if(gameState.score > 20 && gameState.level === 1)
       gameInterval = requestAnimationFrame(drawGame)
     else if(gameState.gameOver){
       document.getElementById("error").innerText = message;
-      document.getElementById("if_err").innerText = `Score (Level ${
+      document.getElementById("if_err").innerText = `Score (Level: ${
         gameState.level == 1? 'Easy': 'Hard'
       }): ${gameState.score}`
       document.getElementById("home-page").classList.remove("d-none")
@@ -416,6 +416,7 @@ else if(gameState.score > 20 && gameState.level === 1)
   // timer
   function startTimer(){
     document.getElementById("timer").classList.remove("d-none");
+    document.getElementById("count").innerText = "3"
     setTimeout(() => {
       document.getElementById("count").innerText = "2"
     }, 1000);
@@ -430,8 +431,9 @@ else if(gameState.score > 20 && gameState.level === 1)
   // selects Level
   function chooseLevel(l){
     document.getElementById("home-page").classList.add("d-none");
+    if(document.getElementById("welcome"))
+      document.getElementById("welcome").remove()
     resetGame(l);
-    
   }
 
   function resetGame(l){
@@ -468,8 +470,8 @@ else if(gameState.score > 20 && gameState.level === 1)
     startTime = 0;
     startTimer()
     setTimeout(()=> {
-    document.getElementById("timer").classList.add("d-none");
-    gameInterval = requestAnimationFrame(drawGame);
+      document.getElementById("timer").classList.add("d-none");
+      gameInterval = requestAnimationFrame(drawGame);
     }, 3000)
   }
 
