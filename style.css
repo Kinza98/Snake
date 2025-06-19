@@ -417,13 +417,5 @@ button{
     font-size: 0.8rem;
   }
 
-  #count-loader div{
-    width: 100px;
-    height: 100px;
-    border-width: 5px;
-  }
-
-  #count{
-    font-size: 3rem;
-  }
+  
 }
