@@ -1,3 +1,5 @@
+// © 2025 Kinza. All rights reserved.
+// Do not reuse, or claim this code as your own. 
 window.addEventListener("load", function(){
   this.document.getElementById("pre-loader").classList.add("d-none");  // close the loader
   const controls = this.document.getElementById("controls");  // buttons
